@@ -20,7 +20,7 @@ void setup() {
   mfrc522.PCD_Init();
   pinMode(LED_PIN, OUTPUT);
   servo.attach(servoPin);
-  servo.write(0);
+  servo.write(90);
   Serial.println("Scan Your Card Please.......");
   Serial.println();  // initialize the RFID scanner
 }
@@ -49,7 +49,7 @@ void loop() {
     
     if (flag == 0) {
       flag = 1;
-      for (int i = 0; i <= 90; i++) {
+      for (int i = 90; i >= 0; i--) {
         servo.write(i);
         delay(15);
       }
@@ -57,7 +57,7 @@ void loop() {
       delay(100);
     }else{
       flag = 0;
-      for (int i = 90; i >= 0; i--) {
+      for (int i = 0; i <= 90; i++) {
         servo.write(i);
         delay(15);
       }
