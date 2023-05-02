@@ -10,6 +10,7 @@
 #define BUTTON_PIN1 2
 #define BUTTON_PIN2 4
 #define BUTTON_PIN3 6
+#define buzzer 8
 
 Servo s1;
 Servo s2;
@@ -31,6 +32,7 @@ void setup()
   pinMode(BUTTON_PIN2, INPUT_PULLUP);
   pinMode(BUTTON_PIN3, INPUT_PULLUP);
   pinMode(7, OUTPUT);
+  pinMode(buzzer, OUTPUT);
   s1.attach(servoPin1);
   s2.attach(servoPin2);
   s1.write(0);
@@ -47,15 +49,25 @@ void loop()
   if(cur-prev>=1000){
     if(!q.isEmpty ()){
       time++;
-      digitalWrite(7,HIGH);
+      //digitalWrite(7,HIGH);
     }
     if(time==5){
       int a = q.pop();
+      Serial.print("Time is over :: ");
       Serial.println(a);
       time = 0;
-      digitalWrite(7,LOW);
+      tone(buzzer, 50);
+      delay(1000);
+      noTone(buzzer); 
+      //digitalWrite(7,LOW);
     }
     prev=cur;
+  }
+
+  if(!q.isEmpty ()){
+    digitalWrite(7,HIGH);
+  }else{
+    digitalWrite(7,LOW);
   }
 
   if ( ! mfrc522.PICC_IsNewCardPresent()) 
@@ -127,7 +139,7 @@ void loop()
           Serial.println("Scan Your Card Please......."); 
         }             
       }else if(buttonState3 == LOW ) {
-        Serial.println("Entered your id in Queue....");
+        Serial.print("Entered your id in Queue :: ");
         Serial.println(number);
         q.enqueue (number);
         number++;
